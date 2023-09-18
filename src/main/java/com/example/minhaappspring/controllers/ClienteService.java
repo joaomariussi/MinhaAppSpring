@@ -32,8 +32,8 @@ public class ClienteService {
     }
 
     // Manda a requisição para o método save da classe ClienteRepository, salvando o cliente
-    public Cliente salvarCliente(Cliente cliente) {
-        return clienteRepository.save(cliente);
+    public void salvarCliente(Cliente cliente) {
+        clienteRepository.save(cliente);
     }
 
     // Manda a requisição para o método deleteById da classe ClienteRepository, excluindo o cliente
@@ -49,7 +49,8 @@ public class ClienteService {
         }
     }
 
-
-
-
+    // Valida se o email já existe em outro cliente
+    public Cliente encontrarClientePorEmail(String email) {
+        return clienteRepository.findByEmail(email);
+    }
 }

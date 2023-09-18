@@ -29,4 +29,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
         @Query("Select count (c) from Cliente c where c.email = :email and c.id <> :id")
         int countClientesWithSameEmail(@Param("email") String email, @Param("id") Long id);
 
-    }
+        // Método que retorna um cliente pelo seu email
+        Cliente findByEmail(String email);
+}

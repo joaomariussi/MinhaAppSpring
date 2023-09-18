@@ -1,8 +1,6 @@
 package com.example.minhaappspring.controllers;
 
 import com.example.minhaappspring.models.Cliente;
-import org.apache.coyote.Response;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,9 +54,18 @@ public class ClienteController {
 
     // Manda a requisição para o método salvarCliente da classe ClienteService
     @PostMapping("/salvarCliente")
-    public ResponseEntity<Cliente> salvarCliente(Cliente cliente) {
-        Cliente novoCliente = clienteService.salvarCliente(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoCliente);
+    public ResponseEntity<String> salvarCliente(@ModelAttribute Cliente cliente) {
+
+        // Verifique se o e-mail já existe em outro cliente
+        Cliente clienteExistente = clienteService.encontrarClientePorEmail(cliente.getEmail());
+
+        if (clienteExistente != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Já existe um cliente com o e-mail " + cliente.getEmail() + "!");
+        }
+
+        // Se o e-mail não existir em outro cliente, salve o cliente
+        clienteService.salvarCliente(cliente);
+        return ResponseEntity.ok("Cliente com ID " + cliente.getId() + " salvo com sucesso!");
     }
 
     // Manda a requisição para o método excluirCliente da classe ClienteService
